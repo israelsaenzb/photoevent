@@ -24,6 +24,8 @@
   .redes a:nth-child(2){background:#111} .redes a:nth-child(3){background:var(--rosa)} .redes a:nth-child(4){background:#c1121f}
   .boton{display:block;padding:17px;margin-bottom:14px;border-radius:50px;font-weight:600;font-size:1.1rem;text-decoration:none;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.18)}
   .boton:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+  button.boton{width:100%;border:0;font-family:inherit;cursor:pointer} .boton:disabled{opacity:.6}
+  #avance{margin-bottom:12px;font-weight:600}
   .subir{background:var(--rosa)} .ver{background:var(--turquesa)}
   .nota{font-size:.85rem;background:#fff;border:2px dashed var(--amarillo);border-radius:14px;padding:12px;margin-top:10px}
 </style>
@@ -45,10 +47,75 @@
     <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
   </nav>
 
-  <a class="boton subir" href="https://drive.google.com/drive/folders/1XBsuQmQKNlHfT1yMeJc8qynqO__7vXDU?usp=drive_link" target="_blank" rel="noopener"><i class="fa-solid fa-camera"></i> Subir fotos</a>
+  <button type="button" class="boton subir" id="btnSubir"><i class="fa-solid fa-camera"></i> Subir fotos</button>
+  <input type="file" id="archivos" accept="image/*" multiple hidden>
+  <p id="avance" aria-live="polite"></p>
   <a class="boton ver" href="galeria.html"><i class="fa-solid fa-book-open"></i> Ver fotos</a>
 
-  <p class="nota"><b>Para subir:</b> inicia sesión con tu cuenta de Google, toca <b>+</b> (o "Nuevo") → <b>Subir</b> y elige tus fotos. Por favor no borres ni muevas las de los demás 🌺</p>
+  <p class="nota">Toca <b>Subir fotos</b>, elige tus mejores momentos y espera el mensaje de confirmación 🌺</p>
 </main>
+<script>
+// PEGA AQUÍ la URL de tu aplicación web de Apps Script (termina en /exec)
+const SCRIPT_URL = "";
+
+const btn = document.getElementById("btnSubir");
+const input = document.getElementById("archivos");
+const avance = document.getElementById("avance");
+let subiendo = false;
+
+btn.onclick = () => {
+  if (!SCRIPT_URL) { avance.textContent = "Falta configurar SCRIPT_URL en index.html"; return; }
+  input.click();
+};
+
+// Reduce la foto (máx. 2400 px) para que suba rápido
+async function preparar(archivo) {
+  const url = URL.createObjectURL(archivo);
+  try {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const escala = Math.min(1, 2400 / Math.max(img.naturalWidth, img.naturalHeight));
+    const lienzo = document.createElement("canvas");
+    lienzo.width = Math.round(img.naturalWidth * escala);
+    lienzo.height = Math.round(img.naturalHeight * escala);
+    lienzo.getContext("2d").drawImage(img, 0, 0, lienzo.width, lienzo.height);
+    return lienzo.toDataURL("image/jpeg", 0.85).split(",")[1];
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function enviar(datos) {
+  const r = await fetch(SCRIPT_URL, { method: "POST", body: datos });
+  const respuesta = await r.json();
+  if (!respuesta.ok) throw new Error(respuesta.error);
+}
+
+input.onchange = async () => {
+  const lista = Array.from(input.files);
+  if (!lista.length) return;
+  subiendo = true;
+  btn.disabled = true;
+  let bien = 0;
+  for (let i = 0; i < lista.length; i++) {
+    avance.textContent = `Subiendo ${i + 1} de ${lista.length}… no cierres la página`;
+    try {
+      await enviar(await preparar(lista[i]));
+      bien++;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  const mal = lista.length - bien;
+  avance.textContent = mal ? `Se subieron ${bien}. Fallaron ${mal}, intenta de nuevo con esas.`
+                           : `¡Gracias! Se subieron ${bien} foto(s) 🎉`;
+  subiendo = false;
+  btn.disabled = false;
+  input.value = "";
+};
+
+window.addEventListener("beforeunload", e => { if (subiendo) e.preventDefault(); });
+</script>
 </body>
 </html>
