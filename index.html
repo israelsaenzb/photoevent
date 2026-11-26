@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival de la Guelaguetza - Comida y Tradición</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d142c 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 450px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .logo {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #f7b731; /* Amarillo cempasúchil */
+            box-shadow: 0 4px 15px rgba(235, 59, 90, 0.4);
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin: 10px 0 5px;
+            color: #f7b731;
+        }
+        p {
+            color: #e0e0e0;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        /* Botón principal: Rosa Mexicano */
+        .btn-subir {
+            background-color: #e81e63;
+            color: white;
+            box-shadow: 0 4px 15px rgba(232, 30, 99, 0.4);
+        }
+        /* Botón secundario: Turquesa / Verde Jade */
+        .btn-ver {
+            background-color: #00a896;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 168, 150, 0.4);
+        }
+        .redes {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .redes a {
+            color: #f7b731;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border: 1px solid #f7b731;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Asegúrate de subir tu imagen como logo.png a GitHub -->
+        <img src="logo.png" alt="Logo Festival Guelaguetza" class="logo">
+        
+        <h1>Festival de la Guelaguetza</h1>
+        <p>Comida típica oaxaqueña, música y tradición.<br>¡Comparte tus mejores momentos con nosotros!</p>
+
+        <!-- REEMPLAZA EL HREF CON EL ENLACE DE TU CARPETA DE GOOGLE DRIVE -->
+        <a href="AQUI_PEGA_TU_ENLACE_DE_GOOGLE_DRIVE" target="_blank" class="btn btn-subir">
+            📸 Sube tus fotos aquí
+        </a>
+
+        <!-- Este botón lleva a la segunda página dentro de tu mismo GitHub -->
+        <a href="galeria.html" class="btn btn-ver">
+            🖼️ Mira las fotos del evento
+        </a>
+
+        <div class="redes">
+            <!-- Reemplaza los # con tus enlaces reales -->
+            <a href="#" target="_blank">Instagram</a>
+            <a href="#" target="_blank">Facebook</a>
+            <a href="#" target="_blank">TikTok</a>
+        </div>
+    </div>
+
+</body>
+</html>
