@@ -23,7 +23,7 @@ const CONFIG = {
   TIKTOK: "#",
   INSTAGRAM: "#",
   YOUTUBE: "#",
-  WHATSAPP: "527227013520",       // 52 + tu número a 10 dígitos, sin espacios
+  WHATSAPP: "527227569999",       // 52 + tu número a 10 dígitos, sin espacios
   // Datos para el aviso de privacidad
   RESPONSABLE: "[SABI]",
   DOMICILIO: "[Tu domicilio para oír y recibir notificaciones]",
