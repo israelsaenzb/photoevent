@@ -3,7 +3,7 @@ const CONFIG = {
   // ---- Datos del evento ----
   TITULO: "¡Nuestra Guelaguetza!",
   SUBTITULO: "Hoy tú eres el fotógrafo de la fiesta 📸",
-  IMAGEN: "https://i.imgur.com/99hsZLL.jpeg",   // enlace directo (termina en .jpg, .jpeg o .png)
+  IMAGEN: "https://i.imgur.com/gmYTnVr.png",   // enlace directo (termina en .jpg, .jpeg o .png)
   TITULO_GALERIA: "Nuestro álbum de la Guelaguetza",
   NOTA: "Toca Subir fotos, elige tus mejores momentos y espera el mensaje de confirmación 🌺",
   EJEMPLO_DEDICATORIA: "¡Felicidades! 🌺",
@@ -18,7 +18,7 @@ const CONFIG = {
   SEGUNDOS_PASE: 3,            // velocidad del pase automático
 
   // ---- Conexión, redes y contacto ----
-  SCRIPT_URL: "",                 // URL de Apps Script (termina en /exec)
+  SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz_iWzegDNaYRFeP0_Ai7hOrFVV0y3LBSySvcmjO4IhbR8WRy2ZGLLGkRJStY8sF_h7eA/exec",                 // URL de Apps Script (termina en /exec)
   FACEBOOK: "#",
   TIKTOK: "#",
   INSTAGRAM: "#",
