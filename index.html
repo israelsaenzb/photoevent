@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photo Book</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+  :root{--rosa:#d6006c;--amarillo:#ffb703;--turquesa:#00a6a6;--morado:#5a189a;--crema:#fff7e8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins',sans-serif;background:var(--crema);color:#3b1f2b;text-align:center;min-height:100vh}
+  .papel{display:flex;overflow:hidden;justify-content:center;border-top:3px solid var(--morado)}
+  .papel span{flex:0 0 48px;height:46px;clip-path:polygon(0 0,100% 0,100% 70%,83% 100%,66% 70%,50% 100%,33% 70%,16% 100%,0 70%);
+    background:radial-gradient(circle at 50% 40%,var(--crema) 6px,transparent 7px),var(--c)}
+  .papel span:nth-child(4n+1){--c:var(--rosa)} .papel span:nth-child(4n+2){--c:var(--amarillo)}
+  .papel span:nth-child(4n+3){--c:var(--turquesa)} .papel span:nth-child(4n){--c:var(--morado)}
+  main{max-width:480px;margin:0 auto;padding:20px 20px 40px}
+  h1{font-family:'Lobster',cursive;font-weight:400;color:var(--rosa);font-size:2.3rem;margin-bottom:6px}
+  .portada{width:100%;height:auto;border-radius:18px;border:5px solid #fff;box-shadow:0 10px 25px rgba(90,24,154,.25);margin:14px 0}
+  .redes{display:flex;justify-content:center;gap:16px;margin:10px 0 24px}
+  .redes a{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.4rem;text-decoration:none;background:var(--morado)}
+  .redes a:nth-child(2){background:#111} .redes a:nth-child(3){background:var(--rosa)} .redes a:nth-child(4){background:#c1121f}
+  .boton{display:block;padding:17px;margin-bottom:14px;border-radius:50px;font-weight:600;font-size:1.1rem;text-decoration:none;color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+  .boton:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+  button.boton{width:100%;border:0;font-family:inherit;cursor:pointer} .boton:disabled{opacity:.6}
+  #avance{margin-bottom:12px;font-weight:600}
+  .legal{font-size:.8rem;margin-bottom:14px} .legal a,.contacto a{color:var(--rosa);font-weight:600}
+  .contacto{margin-top:22px;font-size:.95rem}
+  #panel{background:#fff;border-radius:16px;padding:14px;margin-bottom:16px}
+  .previa{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+  .previa img{width:70px;height:70px;object-fit:cover;border-radius:8px;flex:none}
+  .previa input{flex:1;min-width:0;padding:10px;border:2px solid var(--amarillo);border-radius:10px;font:inherit;font-size:16px}
+  #cancelar{background:none;border:0;text-decoration:underline;font:inherit;cursor:pointer}
+  .subir{background:var(--rosa)} .ver{background:var(--turquesa)}
+  .nota{font-size:.85rem;background:#fff;border:2px dashed var(--amarillo);border-radius:14px;padding:12px;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="papel" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+<main>
+  <h1 data-t="TITULO"></h1>
+  <p data-t="SUBTITULO"></p>
+
+  <img class="portada" alt="" referrerpolicy="no-referrer">
+
+  <!-- EDITA AQUÍ: cambia cada # por el enlace de tu red social -->
+  <nav class="redes" aria-label="Redes sociales">
+    <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+    <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+  </nav>
+
+  <button type="button" class="boton subir" id="btnSubir"><i class="fa-solid fa-camera"></i> Subir fotos</button>
+  <input type="file" id="archivos" accept="image/*" multiple hidden>
+  <section id="panel" hidden>
+    <p><b>¿Quieres dejar una dedicatoria?</b> Es opcional (máx. 80 letras).</p>
+    <div id="previas"></div>
+    <button type="button" class="boton subir" id="enviar">Enviar</button>
+    <button type="button" id="cancelar">Cancelar</button>
+  </section>
+  <p id="avance" aria-live="polite"></p>
+  <a class="boton ver" href="galeria.html"><i class="fa-solid fa-book-open"></i> Ver fotos</a>
+  <p class="legal">Al usar este servicio aceptas nuestro <a href="aviso.html">Aviso de privacidad</a>.</p>
+
+  <p class="nota" data-t="NOTA"></p>
+  <p class="contacto">¿Te gustaría tener esta experiencia en tus eventos? <a id="contacto" href="#" target="_blank" rel="noopener">Contáctanos</a></p>
+</main>
+<script src="config.js"></script>
+<script src="plantilla.js"></script>
+<script>
+const SCRIPT_URL = CONFIG.SCRIPT_URL;
+["Facebook","TikTok","Instagram","YouTube"].forEach(red => {
+  document.querySelector(`.redes a[aria-label="${red}"]`).href = CONFIG[red.toUpperCase()];
+});
+document.getElementById("contacto").href = "https://wa.me/" + CONFIG.WHATSAPP + "?text=" +
+  encodeURIComponent("Hola, quiero el photo book digital para mi evento");
+
+const btn = document.getElementById("btnSubir");
+const input = document.getElementById("archivos");
+const avance = document.getElementById("avance");
+const panel = document.getElementById("panel");
+const previas = document.getElementById("previas");
+const btnEnviar = document.getElementById("enviar");
+const btnCancelar = document.getElementById("cancelar");
+let pendientes = [];
+let subiendo = false;
+
+btn.onclick = () => {
+  if (!SCRIPT_URL) { avance.textContent = "Falta configurar SCRIPT_URL en config.js"; return; }
+  input.click();
+};
+
+function limpiar() {
+  pendientes.forEach(p => URL.revokeObjectURL(p.url));
+  pendientes = [];
+  previas.innerHTML = "";
+  panel.hidden = true;
+  btn.disabled = false;
+  input.value = "";
+}
+
+// Muestra cada foto con su campo de dedicatoria
+input.onchange = () => {
+  const lista = Array.from(input.files);
+  if (!lista.length) return;
+  limpiar();
+  pendientes = lista.map(archivo => {
+    const fila = document.createElement("div");
+    fila.className = "previa";
+    const url = URL.createObjectURL(archivo);
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "Foto elegida";
+    const texto = document.createElement("input");
+    texto.maxLength = 80;
+    texto.placeholder = CONFIG.EJEMPLO_DEDICATORIA;
+    texto.setAttribute("aria-label", "Dedicatoria");
+    fila.append(img, texto);
+    previas.appendChild(fila);
+    return { archivo, url, fila, texto };
+  });
+  panel.hidden = false;
+  btn.disabled = true;
+  avance.textContent = "";
+};
+
+btnCancelar.onclick = limpiar;
+
+// Reduce la foto (máx. 2400 px) para que suba rápido
+async function preparar(archivo) {
+  const url = URL.createObjectURL(archivo);
+  try {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const escala = Math.min(1, 2400 / Math.max(img.naturalWidth, img.naturalHeight));
+    const lienzo = document.createElement("canvas");
+    lienzo.width = Math.round(img.naturalWidth * escala);
+    lienzo.height = Math.round(img.naturalHeight * escala);
+    lienzo.getContext("2d").drawImage(img, 0, 0, lienzo.width, lienzo.height);
+    return lienzo.toDataURL("image/jpeg", 0.85).split(",")[1];
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+async function enviar(datos, mensaje) {
+  const destino = SCRIPT_URL + "?mensaje=" + encodeURIComponent(mensaje);
+  const r = await fetch(destino, { method: "POST", body: datos });
+  const respuesta = await r.json();
+  if (!respuesta.ok) throw new Error(respuesta.error);
+}
+
+btnEnviar.onclick = async () => {
+  subiendo = true;
+  btnEnviar.disabled = btnCancelar.disabled = true;
+  const total = pendientes.length;
+  const fallidas = [];
+  for (let i = 0; i < total; i++) {
+    const p = pendientes[i];
+    avance.textContent = `Subiendo ${i + 1} de ${total}… no cierres la página`;
+    try {
+      await enviar(await preparar(p.archivo), p.texto.value.trim());
+      p.fila.remove();
+      URL.revokeObjectURL(p.url);
+    } catch (e) {
+      console.error(e);
+      fallidas.push(p);
+    }
+  }
+  pendientes = fallidas;
+  subiendo = false;
+  btnEnviar.disabled = btnCancelar.disabled = false;
+  if (fallidas.length) {
+    avance.textContent = `Se subieron ${total - fallidas.length}. Fallaron ${fallidas.length}: toca Enviar para reintentar.`;
+  } else {
+    limpiar();
+    avance.textContent = `¡Gracias! Se subieron ${total} foto(s) 🎉`;
+  }
+};
+
+window.addEventListener("beforeunload", e => { if (subiendo) e.preventDefault(); });
+</script>
+</body>
+</html>
