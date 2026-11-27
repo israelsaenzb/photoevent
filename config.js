@@ -1,13 +1,31 @@
 // EDITA SOLO ESTE ARCHIVO con tus datos
 const CONFIG = {
+  // ---- Datos del evento ----
+  TITULO: "¡Nuestra Guelaguetza!",
+  SUBTITULO: "Hoy tú eres el fotógrafo de la fiesta 📸",
+  IMAGEN: "https://i.imgur.com/99hsZLL.jpeg",   // enlace directo (termina en .jpg, .jpeg o .png)
+  TITULO_GALERIA: "Nuestro álbum de la Guelaguetza",
+  NOTA: "Toca Subir fotos, elige tus mejores momentos y espera el mensaje de confirmación 🌺",
+  EJEMPLO_DEDICATORIA: "¡Felicidades! 🌺",
+
+  // ---- Colores (código hexadecimal) ----
+  COLOR_FONDO: "#fff7e8",      // fondo de la portada y páginas del álbum (usa un tono claro)
+  COLOR_PRINCIPAL: "#d6006c",  // título y botón "Subir fotos"
+  COLOR_SECUNDARIO: "#00a6a6", // botón "Ver fotos"
+  COLOR_ACENTO: "#ffb703",     // detalles y título de la galería
+  COLOR_OSCURO: "#5a189a",     // iconos y fondo de la galería
+
+  SEGUNDOS_PASE: 3,            // velocidad del pase automático
+
+  // ---- Conexión, redes y contacto ----
   SCRIPT_URL: "",                 // URL de Apps Script (termina en /exec)
   FACEBOOK: "#",
   TIKTOK: "#",
   INSTAGRAM: "#",
   YOUTUBE: "#",
-  WHATSAPP: "52XXXXXXXXXX",       // 52 + tu número a 10 dígitos, sin espacios
+  WHATSAPP: "527227013520",       // 52 + tu número a 10 dígitos, sin espacios
   // Datos para el aviso de privacidad
-  RESPONSABLE: "[Tu nombre completo]",
+  RESPONSABLE: "[SABI]",
   DOMICILIO: "[Tu domicilio para oír y recibir notificaciones]",
   CORREO: "[tu-correo@ejemplo.com]",
   DIAS_CONSERVACION: 90,
