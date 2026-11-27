@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galería</title>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{--rosa:#d6006c;--amarillo:#ffb703;--turquesa:#00a6a6;--morado:#5a189a;--crema:#fff7e8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Poppins',sans-serif;background:linear-gradient(160deg,var(--morado),var(--rosa));min-height:100vh;color:#fff;text-align:center;padding:16px}
+  h1{font-family:'Lobster',cursive;font-weight:400;font-size:2rem;color:var(--amarillo)}
+  a.volver{color:#fff;font-size:.9rem}
+  #estado{margin:14px;min-height:1.5em}
+  #libro{display:flex;justify-content:center;perspective:1600px;margin:0 auto;max-width:900px;touch-action:pan-y}
+  .pagina{flex:1;max-width:440px;height:min(68vh,600px);background:var(--crema);color:#3b1f2b;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 14px 30px rgba(0,0,0,.35);border:8px solid #fff;position:relative;overflow:hidden}
+  .pagina:first-child{border-radius:12px 3px 3px 12px} .pagina:last-child{border-radius:3px 12px 12px 3px}
+  .pagina:only-child{border-radius:12px}
+  .foto{background:#fff;padding:10px 10px 30px;box-shadow:0 5px 14px rgba(0,0,0,.25);transform:rotate(-1.5deg);max-width:100%;max-height:90%;display:flex;position:relative}
+  .pagina:nth-child(2) .foto{transform:rotate(1.5deg)}
+  .foto img{display:block;max-width:100%;max-height:calc(min(68vh,600px) - 130px);object-fit:contain;cursor:zoom-in}
+  .foto::before{content:"";position:absolute;top:-10px;left:50%;width:90px;height:22px;margin-left:-45px;background:rgba(255,183,3,.8)}
+  .sticker{margin-top:14px;max-width:92%;background:#ffe27a;color:#3b1f2b;padding:8px 14px;border-radius:6px;transform:rotate(-2deg);
+    box-shadow:0 4px 10px rgba(0,0,0,.22);font:400 1.05rem 'Lobster',cursive;overflow-wrap:anywhere;flex:none;margin-bottom:14px}
+  .foto.con-mensaje img{max-height:calc(min(68vh,600px) - 220px)}
+  .num{position:absolute;bottom:8px;font-size:.75rem;color:var(--morado)}
+  .pasa-sig{animation:sig .55s ease;transform-origin:left center}
+  .pasa-ant{animation:ant .55s ease;transform-origin:right center}
+  @keyframes sig{from{transform:rotateY(70deg);opacity:.3}to{transform:rotateY(0);opacity:1}}
+  @keyframes ant{from{transform:rotateY(-70deg);opacity:.3}to{transform:rotateY(0);opacity:1}}
+  .controles{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:18px}
+  button{border:0;border-radius:40px;padding:12px 22px;font:600 1rem 'Poppins',sans-serif;background:var(--amarillo);color:#3b1f2b;cursor:pointer}
+  button:disabled{opacity:.4}
+</style>
+</head>
+<body>
+<a class="volver" href="index.html">← Regresar al inicio</a>
+<h1 data-t="TITULO_GALERIA"></h1>
+<p id="estado" aria-live="polite">Cargando fotos…</p>
+<div id="libro"></div>
+<div class="controles">
+  <button id="ant" disabled>‹ Anterior</button>
+  <button id="sig" disabled>Siguiente ›</button>
+  <button id="auto">▶ Pase automático</button>
+</div>
+<p style="margin-top:14px;font-size:.8rem"><a class="volver" href="aviso.html">Aviso de privacidad</a></p>
+
+<script src="config.js"></script>
+<script src="plantilla.js"></script>
+<script>
+const SCRIPT_URL = CONFIG.SCRIPT_URL;
+
+const libro = document.getElementById("libro");
+const estado = document.getElementById("estado");
+const btnAnt = document.getElementById("ant");
+const btnSig = document.getElementById("sig");
+let fotos = [];
+let pos = 0;
+
+const porVista = () => window.innerWidth >= 800 ? 2 : 1;
+const urlImagen = (id, ancho) => `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${ancho}`;
+
+function pintar(direccion) {
+  const n = porVista();
+  pos = Math.max(0, Math.min(pos, fotos.length - 1));
+  pos -= pos % n;
+  libro.innerHTML = "";
+
+  fotos.slice(pos, pos + n).forEach((f, i) => {
+    const pagina = document.createElement("div");
+    pagina.className = "pagina" + (direccion ? " pasa-" + direccion : "");
+
+    const marco = document.createElement("div");
+    marco.className = "foto";
+    const img = document.createElement("img");
+    img.referrerPolicy = "no-referrer";
+    img.src = urlImagen(f.id, 1000);
+    img.alt = "Foto " + (pos + i + 1);
+    img.onclick = () => window.open(`https://drive.google.com/file/d/${encodeURIComponent(f.id)}/view`, "_blank", "noopener");
+    marco.appendChild(img);
+
+    const num = document.createElement("span");
+    num.className = "num";
+    num.textContent = `${pos + i + 1} de ${fotos.length}`;
+
+    pagina.append(marco);
+    if (f.mensaje) {
+      marco.classList.add("con-mensaje");
+      const sticker = document.createElement("p");
+      sticker.className = "sticker";
+      sticker.textContent = f.mensaje;
+      pagina.appendChild(sticker);
+    }
+    pagina.appendChild(num);
+    libro.appendChild(pagina);
+  });
+
+  btnAnt.disabled = pos === 0;
+  btnSig.disabled = pos + n >= fotos.length;
+}
+
+function mover(paso) {
+  const nueva = pos + paso * porVista();
+  if (nueva < 0 || nueva >= fotos.length) return;
+  pos = nueva;
+  pintar(paso > 0 ? "sig" : "ant");
+}
+
+async function cargar() {
+  if (!SCRIPT_URL) {
+    estado.textContent = "Falta configurar SCRIPT_URL en config.js";
+    return;
+  }
+  try {
+    const r = await fetch(SCRIPT_URL);
+    const datos = await r.json();
+    if (!Array.isArray(datos)) throw new Error("Respuesta no válida");
+    const cambio = datos.map(f => f.id).join() !== fotos.map(f => f.id).join();
+    fotos = datos;
+    estado.textContent = fotos.length ? "Desliza para pasar la página · toca una foto para verla grande"
+                                      : "Aún no hay fotos. ¡Sé el primero en subir una! 🌺";
+    if (cambio) pintar();
+  } catch (e) {
+    console.error(e);
+    if (!fotos.length) estado.textContent = "No pudimos cargar las fotos. Reintentando en un momento…";
+  }
+}
+
+btnAnt.onclick = () => mover(-1);
+btnSig.onclick = () => mover(1);
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") mover(1);
+  if (e.key === "ArrowLeft") mover(-1);
+});
+let inicioX = null;
+libro.addEventListener("touchstart", e => inicioX = e.touches[0].clientX, { passive: true });
+libro.addEventListener("touchend", e => {
+  if (inicioX === null) return;
+  const dx = e.changedTouches[0].clientX - inicioX;
+  if (Math.abs(dx) > 50) mover(dx < 0 ? 1 : -1);
+  inicioX = null;
+});
+let vistaActual = porVista();
+window.addEventListener("resize", () => {
+  if (porVista() !== vistaActual) { vistaActual = porVista(); pintar(); }
+});
+
+// Pase automático: cambia según SEGUNDOS_PASE y al final vuelve a empezar
+const btnAuto = document.getElementById("auto");
+let reloj = null;
+btnAuto.onclick = () => {
+  if (reloj) {
+    clearInterval(reloj);
+    reloj = null;
+    btnAuto.textContent = "▶ Pase automático";
+    return;
+  }
+  btnAuto.textContent = "⏸ Pausar";
+  reloj = setInterval(() => {
+    if (!fotos.length) return;
+    pos = pos + porVista() < fotos.length ? pos + porVista() : 0;
+    pintar("sig");
+  }, CONFIG.SEGUNDOS_PASE * 1000);
+};
+
+cargar();
+setInterval(cargar, 60000); // busca fotos nuevas cada minuto
+</script>
+</body>
+</html>
